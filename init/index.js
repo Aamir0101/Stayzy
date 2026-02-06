@@ -2,7 +2,7 @@ const mongoose= require("mongoose");
 const initData= require("./data.js");
 const Listing = require("../models/listing.js");
 
-const MONGO_URL ="mongodb://127.0.0.1:27017/stayzy"
+const dbUrl= process.env.ATLAS_DB_URL;
 
 main().then(()=>{
     console.log("connected to db")
@@ -11,8 +11,8 @@ main().then(()=>{
 });
 
 async function main() {
-  await mongoose.connect(MONGO_URL);
-};
+  await mongoose.connect(dbUrl);
+}
 
 const initDB= async ()=>{
     await Listing.deleteMany({});
