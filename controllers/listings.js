@@ -22,39 +22,44 @@ module.exports.showListing = async (req,res)=>{
     res.render("listings/show.ejs",{listing});
 }
 
-module.exports.createListing=async (req,res)=>{
-    const geoUrl=`https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(location)}&apiKey=${mapToken}`;
+module.exports.createListing = async (req, res) => {
 
-    const geoapifyForwardGeocode = async (location)=>{
-        const response =
-            await axios.get(geoUrl,
+    const geoapifyForwardGeocode = async (location) => {
+        const response = await axios.get(
+            "https://api.geoapify.com/v1/geocode/search",
             {
                 params: {
                     text: location,
-                    limit:1,
-                    apiKey:mapToken
-                }
+                    limit: 1,
+                    apiKey: mapToken,
+                },
             }
         );
-    return response.data.features[0];
-    }
 
-    const feature = await geoapifyForwardGeocode(req.body.listing.location);
-    const geometry= feature.geometry;
+        return response.data.features[0];
+    };
 
-    let url= req.file.path;
-    let filename= req.file.filename;
-    const newListing= new Listing(req.body.listing);
-    newListing.owner= req.user._id;
-    newListing.image= {url, filename};
-    
+    const feature = await geoapifyForwardGeocode(
+        req.body.listing.location
+    );
+
+    const geometry = feature.geometry;
+
+    let url = req.file.path;
+    let filename = req.file.filename;
+
+    const newListing = new Listing(req.body.listing);
+
+    newListing.owner = req.user._id;
+    newListing.image = { url, filename };
     newListing.geometry = geometry;
 
     await newListing.save();
 
     req.flash("success", "New Listing created");
     res.redirect("/listings");
-}
+};
+
 
 module.exports.renderEditForm=async (req,res)=>{
     let {id}=req.params;
