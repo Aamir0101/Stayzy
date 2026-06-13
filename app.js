@@ -21,9 +21,7 @@ const listingRouter= require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter= require("./routes/user.js");
 
-
-
-const dbUrl= process.env.ATLAS_DB_URL;
+const dbUrl= "mongodb://127.0.0.1:27017/stayzy";
 
 main().then(()=>{
     console.log("connected to db")
