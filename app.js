@@ -21,7 +21,7 @@ const listingRouter= require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter= require("./routes/user.js");
 
-const dbUrl= "mongodb://127.0.0.1:27017/stayzy";
+const dbUrl=ATLAS_DB_URL;
 
 main().then(()=>{
     console.log("connected to db")
@@ -48,7 +48,7 @@ const store= new MongoStore({
   touchAfter: 24 * 3600,
 });
 
-store.on("error", ()=>{
+store.on("error", (err)=>{
   console.log("error in MONGO SESSION STORE", err);
 });
 
